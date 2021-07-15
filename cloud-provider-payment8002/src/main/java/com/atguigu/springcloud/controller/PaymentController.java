@@ -1,6 +1,5 @@
 package com.atguigu.springcloud.controller;
 
-import com.alibaba.druid.sql.visitor.functions.If;
 import com.atguigu.springcloud.entities.CommonResult;
 import com.atguigu.springcloud.entities.Payment;
 import com.atguigu.springcloud.service.PaymentService;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 public class PaymentController {
     @Autowired
     private PaymentService paymentService;
-
     @Value("${server.port}")
     private String serverPort;
     @PostMapping("/payment")
