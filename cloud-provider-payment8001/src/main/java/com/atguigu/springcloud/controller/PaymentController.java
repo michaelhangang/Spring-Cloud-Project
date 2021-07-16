@@ -7,7 +7,11 @@ import com.atguigu.springcloud.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author Gang Han
@@ -18,7 +22,8 @@ import org.springframework.web.bind.annotation.*;
 public class PaymentController {
     @Autowired
     private PaymentService paymentService;
-
+    @Autowired
+    private DiscoveryClient discoveryClient;
     @Value("${server.port}")
     private String serverPort;
     @PostMapping("/payment")
@@ -41,4 +46,16 @@ public class PaymentController {
         return new CommonResult(444, "Query failed", null);
     }
 
+    @GetMapping("/payment/discovery")
+    public Object discovery() {
+        List<String> services = discoveryClient.getServices();
+        for (String service : services) {
+            log.info("*****"+service);
+        }
+        List<ServiceInstance> instances = discoveryClient.getInstances("CLOUD-PAYMENT-SERVICE");
+        for (ServiceInstance instance : instances) {
+            log.info(instance.getUri().toString());
+        }
+        return this.discoveryClient;
+    }
 }
